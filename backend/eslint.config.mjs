@@ -3,22 +3,24 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import { defineConfig } from 'eslint/config';
 import prettierPlugin from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
 
 export default defineConfig([
-  { ignores: ['node_modules/', 'dist/', 'build/'] },
+  {
+    ignores: ['node_modules/', 'dist/', 'build/'],
+  },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
-    plugins: { js },
+    plugins: {
+      js,
+      prettier: prettierPlugin,
+    },
     rules: {
       ...prettierPlugin.configs.recommended.rules,
       'prettier/prettier': 'error',
     },
-    extends: ['js/recommended', prettierConfig],
-  },
-  {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: globals.browser,
+    },
   },
   tseslint.configs.recommended,
 ]);
