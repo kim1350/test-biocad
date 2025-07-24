@@ -4,6 +4,11 @@ export interface RegisterRequestBody {
   name: string;
 }
 
+export interface UsersRequestBody {
+  email: string;
+  name: string;
+  photo?: string;
+}
 export interface LoginRequestBody {
   email: string;
   password: string;
