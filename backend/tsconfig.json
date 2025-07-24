@@ -13,6 +13,7 @@
     "types": ["node"],
     "noImplicitAny": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/generated/prisma"],
   "exclude": ["node_modules", "dist"]
 }
+
