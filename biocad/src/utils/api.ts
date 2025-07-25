@@ -1,8 +1,9 @@
 import axios, { type AxiosInstance } from "axios";
 import { getItem } from "../services/storage";
+import { BASE_URL } from "./config";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 

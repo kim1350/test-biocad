@@ -4,7 +4,7 @@ import { fonts, normalize } from "../constants/Fonts";
 import { fontSizes, lineHeights } from "../constants/Sizes";
 import { useThemeColor } from "../hooks/useThemeColor";
 
-interface ThemedTextProps extends TextProps {
+export interface ThemedTextProps extends TextProps {
   children: React.ReactNode;
   font?: keyof typeof fonts;
   size?: (typeof fontSizes)[number];

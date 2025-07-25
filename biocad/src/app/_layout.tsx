@@ -10,6 +10,10 @@ import { CustomThemeProvider } from "../components/ThemeContext";
 import store from "../store";
 const queryClient = new QueryClient();
 
+if (__DEV__) {
+  require("./ReactotronConfig");
+}
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
