@@ -1,14 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const HomeScreen = () => {
+const SplashLoading = () => {
   return (
     <View>
-      <Text>index</Text>
+      <Text>SplashLoading</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default SplashLoading;
 
 const styles = StyleSheet.create({});

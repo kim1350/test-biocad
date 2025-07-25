@@ -1,14 +1,22 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
-import 'react-native-reanimated';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { useColorScheme } from "react-native";
+import "react-native-reanimated";
+import { Provider } from "react-redux";
+import store from "../store";
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
- const [loaded, error] = useFonts({
+  const [loaded, error] = useFonts({
     "Roboto-Black": require("../../assets/fonts/Roboto-Black.ttf"),
     "Roboto-BlackItalic": require("../../assets/fonts/Roboto-BlackItalic.ttf"),
     "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
@@ -29,7 +37,7 @@ export default function RootLayout() {
     "Roboto-ThinItalic": require("../../assets/fonts/Roboto-ThinItalic.ttf"),
   });
 
-useEffect(() => {
+  useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
       if (error) {
@@ -43,12 +51,18 @@ useEffect(() => {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </Provider>
   );
 }
