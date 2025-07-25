@@ -1,21 +1,18 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { Slot, SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 import { Provider } from "react-redux";
+import { CustomThemeProvider } from "../components/ThemeContext";
 import store from "../store";
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
   const [loaded, error] = useFonts({
     "Roboto-Black": require("../../assets/fonts/Roboto-Black.ttf"),
     "Roboto-BlackItalic": require("../../assets/fonts/Roboto-BlackItalic.ttf"),
@@ -53,15 +50,10 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+        <CustomThemeProvider>
+          <Slot />
           <StatusBar style="auto" />
-        </ThemeProvider>
+        </CustomThemeProvider>
       </QueryClientProvider>
     </Provider>
   );
