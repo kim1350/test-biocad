@@ -1,12 +1,12 @@
-import { ThemedView } from '@/src/components/ThemedView'
+import { Colors } from '@/src/constants/Colors'
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 const HomeScreen = () => {
   return (
-    <ThemedView>
+    <View style={{flex:1, backgroundColor: Colors.dark.background}}>
       <Text>index</Text>
-    </ThemedView>
+    </View>
   )
 }
 

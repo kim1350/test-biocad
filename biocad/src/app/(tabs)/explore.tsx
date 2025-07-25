@@ -4,7 +4,7 @@ import { StyleSheet, Text } from 'react-native'
 
 const ProfileScreen = () => {
   return (
-    <ThemedView>
+    <ThemedView >
       <Text>explore</Text>
     </ThemedView>
   )
