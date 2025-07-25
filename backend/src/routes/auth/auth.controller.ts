@@ -5,3 +5,6 @@ export const login = (req: Request, res: Response) =>
   AuthService.login(req, res);
 export const register = (req: Request, res: Response) =>
   AuthService.register(req, res);
+
+export const refreshToken = (req: Request, res: Response) =>
+  AuthService.refreshToken(req, res);
