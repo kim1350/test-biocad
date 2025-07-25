@@ -1,6 +1,8 @@
 export interface ProfileState {
   isLoading: boolean;
-  data: {};
+  data: {
+    user: Profile;
+  } | null;
 }
 
 export interface Profile {

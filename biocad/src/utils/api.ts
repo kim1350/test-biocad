@@ -1,11 +1,25 @@
 import axios, { type AxiosInstance } from "axios";
-import { getItem } from "../services/storage";
+import { getItem, setItem } from "../services/storage";
 import { BASE_URL } from "./config";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
 
 axiosInstance.interceptors.request.use(
   async (config) => {
@@ -22,13 +36,52 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   async (config) => config,
-  async (error) => {
-    if (error?.response?.status == 401) {
-      let url = error?.response?.config?.url || "";
 
-      // if (!url.includes("/login") && !url.includes("/signin")) {
-      //   navigationRef.navigate("Unauthorized" as never);
-      // }
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/refresh-token")
+    ) {
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({
+            resolve: (token: string) => {
+              originalRequest.headers.Authorization = "Bearer " + token;
+              resolve(axiosInstance(originalRequest));
+            },
+            reject: (err: any) => reject(err),
+          });
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const refreshToken = getItem("refreshToken");
+
+        const response = await axios.post(`${BASE_URL}/refresh-token`, {
+          refreshToken,
+        });
+
+        const { accessToken } = response.data;
+
+        setItem("token", accessToken);
+
+        axiosInstance.defaults.headers.common.Authorization =
+          "Bearer " + accessToken;
+
+        processQueue(null, accessToken);
+        return axiosInstance(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
     }
     return Promise.reject(error);
   }
