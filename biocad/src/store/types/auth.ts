@@ -5,8 +5,7 @@ export interface AuthState {
 export interface Login {
   expires_in: number;
   expires_timestamp: number;
-  filled?: number;
-  id?: number;
-  status?: string;
-  token: string;
+  refreshToken: string;
+
+  accessToken: string;
 }

@@ -28,7 +28,7 @@ const AuthScreen = () => {
         console.log("error", data);
       },
       onSuccess: (data) => {
-        dispatch(login(data.token as never));
+        dispatch(login(data as never));
 
         router.navigate("/(tabs)");
       },

@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { getItem, setItem } from "@/src/services/storage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthState } from "../types/auth";
+import { AuthState, Login } from "../types/auth";
 
 const initialState: AuthState = {
   isAuthenticated: false,
@@ -15,21 +15,22 @@ export const authSlice = createSlice({
       const token = getItem("token");
       state.isAuthenticated = !!token;
     },
-    login: (state, action: PayloadAction<string>) => {
+    login: (state, action: PayloadAction<Login>) => {
       console.log(action.payload);
-      setItem("token", action.payload);
-      // setItem(
-      //   "token_deadline",
-      //   `${
-      //     action.payload.expires_timestamp * 1000 -
-      //     action.payload.expires_in * 0.1 * 1000
-      //   }`
-      // );
+      setItem("token", action.payload.accessToken);
+      setItem("refreshToken", action.payload.refreshToken);
+      setItem(
+        "token_deadline",
+        `${
+          action.payload.expires_timestamp * 1000 -
+          action.payload.expires_in * 0.1 * 1000
+        }`
+      );
       if (!state.isAuthenticated) state.isAuthenticated = true;
     },
     logout: (state) => {
       setItem("token", "");
-      // setItem("token_deadline", "");
+      setItem("token_deadline", "");
       state.isAuthenticated = false;
     },
   },
