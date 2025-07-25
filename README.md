@@ -12,6 +12,9 @@
 1. Установите зависимости:
 
 ```bash
+
+cd .\biocad\ 
+
 yarn install
 
 npx expo start
